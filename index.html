@@ -11,7 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
@@ -22,7 +22,7 @@
       theme: {
         extend: {
           fontFamily: {
-            bengali: ['Tiro Bangla', 'serif'],
+            bengali: ['Hind Siliguri', 'Noto Sans Bengali', 'sans-serif'],
             english: ['Inter', 'sans-serif']
           }
         }
@@ -35,10 +35,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body { font-family: 'Hind Siliguri', sans-serif; }
-    
-
-    
+    html, body {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    }
 
     .app-shell {
       max-width: 520px;
@@ -147,10 +146,8 @@
         </div>
       </button>
 
-      <!-- Class 9 (old button)
-      <button type="button" onclick="selectClass(9)" data-class="9"
-        class="class-card min-h-[175px] rounded-[25px] border-2 border-[#d9f3e2] bg-gradient-to-br from-[#eefaf2] to-[#e5f7eb] p-5 text-left">
-          
+      <!-- Class 9 -->
+      <a href="/9/chapter.html" onclick="selectClass(9)" data-class="9" class="class-card block min-h-[175px] rounded-[25px] border-2 border-[#d9f3e2] bg-gradient-to-br from-[#eefaf2] to-[#e5f7eb] p-5 text-left">
         <i class="fa-solid fa-book-open text-[43px] text-[#32a86e]"></i>
         <div class="mt-5 flex items-center justify-between gap-2">
           <div class="flex items-baseline gap-3">
@@ -159,19 +156,8 @@
           </div>
           <i class="fa-solid fa-chevron-right text-lg text-[#32a86e]"></i>
         </div>
-      </button>
---≥
-<!-- Class 9 --> 
-<a href="/9/chapter.html" onclick="selectClass(9)" data-class="9" class="class-card block min-h-[175px] rounded-[25px] border-2 border-[#d9f3e2] bg-gradient-to-br from-[#eefaf2] to-[#e5f7eb] p-5 text-left"> 
-    <i class="fa-solid fa-book-open text-[43px] text-[#32a86e]"></i> 
-    <div class="mt-5 flex items-center justify-between gap-2"> 
-        <div class="flex items-baseline gap-3"> 
-            <span class="font-english text-[48px] font-extrabold leading-none text-[#168357]">9</span> 
-            <span class="text-[22px] font-semibold text-[#168357]">শ্রেণী</span> 
-        </div> 
-        <i class="fa-solid fa-chevron-right text-lg text-[#32a86e]"></i> 
-    </div>
-</a>
+      </a>
+
       <!-- Class 10 -->
       <button type="button" onclick="selectClass(10)" data-class="10"
         class="class-card min-h-[175px] rounded-[25px] border-2 border-[#e7ddff] bg-gradient-to-br from-[#f4f0ff] to-[#eee8ff] p-5 text-left">
@@ -241,19 +227,10 @@
 
   <script>
     function selectClass(classNumber) {
-      // নির্বাচিত শ্রেণী মনে রাখে, যাতে পরের পেজে ব্যবহার করা যায়।
       try {
         localStorage.setItem('ganitBondhuSelectedClass', String(classNumber));
       } catch (e) {
-        // localStorage বন্ধ থাকলেও পেজ যেন ঠিকভাবে চলে
       }
-
-    //  const message = document.getElementById('selection-message');
-    //  message.textContent = 'আপনি ' + classNumber + ' শ্রেণী নির্বাচন করেছেন।';
-     // message.classList.remove('hidden');
-
-      // পরবর্তী পেজ যুক্ত করলে এখানে navigation যোগ করুন।
-      // উদাহরণ: window.location.href = 'chapters.html';
     }
   </script>
 
