@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7faff">
+  <title>সমাধান — গণিত বন্ধু</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- MathJax (LaTeX support) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 1.08,
+        displayAlign: 'left',
+        displayIndent: '0'
+      }
+    };
+  </script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            bengali: ['Tiro Bangla', 'serif'],
+            english: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: "Tiro Bangla", serif; }
+    .app-shell { max-width: 520px; }
+
+    button:focus-visible {
+      outline: 3px solid #3989e9;
+      outline-offset: 2px;
+    }
+
+    /* আলাদা লাইনের সমীকরণ: বামদিকে সাজানো, বড় হলে স্ক্রল */
+    mjx-container[display="true"] {
+      text-align: left !important;
+      margin: .35em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: .15em 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-[#fbfcff] text-[#123d7d]">
+
+  <main class="app-shell relative mx-auto min-h-screen bg-[#f7faff] px-4 pb-12 shadow-[0_0_55px_rgba(36,69,112,0.05)] sm:px-5">
+
+    <!-- ===== Header ===== -->
+    <header class="flex items-center gap-3 pt-6">
+      <button type="button" onclick="history.back()" aria-label="পেছনে যান"
+        class="h-10 w-8 shrink-0 text-[#1554a4] transition hover:text-blue-600">
+        <i class="fa-solid fa-arrow-left text-[24px]"></i>
+      </button>
+
+      <img
+        src="https://www.appcreator24.com/srv/imgs/gen/4227302_icohome.png?ts=1792924059"
+        alt="গণিত বন্ধু অ্যাপ আইকন"
+        class="h-[60px] w-[60px] shrink-0 rounded-[18px] object-cover shadow-sm">
+
+      <div class="min-w-0 flex-1">
+        <h1 class="text-[24px] leading-tight text-[#1554a4]">গণিত বন্ধু</h1>
+        <p class="font-english text-[12px] leading-snug text-[#637895]">WBBSE Math Solutions</p>
+      </div>
+
+      <button type="button" id="bookmark-btn" aria-label="বুকমার্ক" aria-pressed="false"
+        class="h-10 w-9 shrink-0 text-[#234a80] transition hover:text-blue-600">
+        <i id="bookmark-icon" class="fa-regular fa-bookmark text-[22px]"></i>
+      </button>
+      <button type="button" aria-label="আরও" class="h-10 w-7 shrink-0 text-[#234a80] transition hover:text-blue-600">
+        <i class="fa-solid fa-ellipsis-vertical text-[20px]"></i>
+      </button>
+    </header>
+
+    <!-- ===== Breadcrumb ===== -->
+    <nav aria-label="অবস্থান" class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 rounded-[20px] bg-white p-3 shadow-[0_2px_10px_rgba(30,64,110,0.04)]">
+      <span class="inline-flex items-center gap-2 rounded-full bg-[#e3eefd] px-4 py-2 font-english text-[15px] text-[#1565c9]">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Class <span id="bc-class"></span></span>
+      </span>
+      <i class="fa-solid fa-chevron-right text-[13px] text-[#8a9bb4]"></i>
+      <span class="rounded-full bg-[#ece6ff] px-4 py-2 text-[15px] text-[#5a37c0]" id="bc-chapter"></span>
+      <i class="fa-solid fa-chevron-right text-[13px] text-[#8a9bb4]"></i>
+      <span class="rounded-full bg-[#d9f5e5] px-4 py-2 text-[15px] text-[#14754d]" id="bc-exercise"></span>
+    </nav>
+
+    <!-- ===== প্রশ্ন ও সমাধান ===== -->
+    <div id="questions" class="mt-4 space-y-8"></div>
+
+    <p id="empty-message" class="hidden py-14 text-center text-[17px] text-[#637895]">কোনো প্রশ্ন পাওয়া যায়নি।</p>
+
+  </main>
+
+  <script>
+    /* =====================================================================
+       ডেটা — শুধু এই অংশটুকু বদলালেই হবে
+       ---------------------------------------------------------------------
+       প্রতিটি প্রশ্নে:
+         no        : (ঐচ্ছিক) প্রশ্ন নম্বর ("1"); না দিলে নিজে থেকে ১, ২, ৩... বসবে
+         part      : (ঐচ্ছিক) অংশ, যেমন "(i)"
+         question  : প্রশ্নের লেখা
+         expr      : (ঐচ্ছিক) প্রশ্নের সমীকরণ, শুধু LaTeX (ডলার ছাড়া)
+         solution  : পুরো সমাধান। একটা লেখা অথবা লাইনের অ্যারে
+
+       LaTeX লেখার নিয়ম (MathJax):
+         • লাইনের ভেতরে গণিত  :  $x = 4$   অথবা  \\(x = 4\\)
+         • আলাদা লাইনে গণিত   :  $$ \\frac{8}{2} $$   অথবা  \\[ ... \\]
+         • ব্যাকস্ল্যাশ সবসময় দুটো লিখতে হবে:  \\frac, \\sqrt, \\times
+         • একাধিক লাইন মিলিয়ে লিখতে:
+              $$\\begin{aligned} 2x &= 8 \\\\ x &= 4 \\end{aligned}$$
+         • solution অ্যারে হলে প্রতিটি উপাদান আলাদা লাইনে দেখাবে
+       ===================================================================== */
+
+    const meta = {
+      classNo: 9,
+      chapterNo: 2,
+      chapterTitle: 'সরল সমীকরণ',
+      exercise: '2.1'
+    };
+
+    const questions = [
+      {
+        no: '1',
+        part: '(i)',
+        question: 'মূলদ সংখ্যা কাকে বলে লিখি। 4টি মূলদ সংখ্যা লিখি।',
+        
+        solution: [
+          '**মূলদ সংখ্যা :** যেসকল সংখ্যাকে $\\frac{p}{q}$ আকারে প্রকাশ করা যায়, যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \\neq 0$, তাদের মূলদ সংখ্যা বলে।',
+    '৪টি মূলদ সংখ্যা হল :',
+    '$$4, \\ \\frac{2}{5}, \\ \\frac{7}{15}, \\ \\frac{9}{14}$$'
+        ]
+      },
+      {
+  no: '2',
+  question: '$0$ কি মূলদ সংখ্যা ? $0$-কে $\\frac{p}{q}$ [যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \\neq 0$, এবং $p$ ও $q$-এর মধ্যে $1$ ছাড়া কোনো সাধারণ উৎপাদক না থাকে] আকারে প্রকাশ করো।',
+  solution: [
+    '$0$ একটি মূলদ সংখ্যা।',
+    'কারণ, শূন্যকে $\\frac{p}{q}\\ (q \\neq 0)$ আকারে প্রকাশ করা যায়।',
+    'যেমন, $0 = \\frac{0}{x}$ যেখানে $x \\neq 0$',
+    '$\\therefore\\ 0$-কে $\\frac{0}{x}$ যেখানে $x \\neq 0$ আকারে প্রকাশ করা যায়।'
+  ]
+}
+    ];
+
+    /* ===================== নিচের অংশে হাত দিতে হবে না ===================== */
+
+    function esc(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function solutionHtml(sol) {
+      const lines = Array.isArray(sol) ? sol : String(sol || '').split('\n');
+      return lines
+        .filter(function (l) { return String(l).trim() !== ''; })
+        .map(function (l) {
+          return '<div class="text-[18px] leading-[1.8] text-[#14305c]">' + esc(l) + '</div>';
+        })
+        .join('');
+    }
+
+    function questionHtml(q, index) {
+      // no না দিলে স্বয়ংক্রিয়ভাবে ক্রমিক নম্বর (১, ২, ৩...) বসে
+      const no = (q.no !== undefined && q.no !== null && String(q.no).trim() !== '') ? q.no : index + 1;
+      const badge = 'Q.' + esc(no);
+      const exprLine = q.expr
+        ? '<p class="mt-2 text-[20px] text-[#14305c]">' +
+            (q.part ? '<span class="mr-3 italic">' + esc(q.part) + '</span>' : '') +
+            '$' + esc(q.expr) + '$</p>'
+        : (q.part ? '<p class="mt-2 text-[18px] italic text-[#14305c]">' + esc(q.part) + '</p>' : '');
+
+      return `
+        <article aria-label="প্রশ্ন ${esc(no)}" class="space-y-4">
+
+          <!-- প্রশ্ন -->
+          <section class="flex items-start gap-4 rounded-[20px] border border-[#d9e6f8] bg-[#eef4fd] p-4">
+            <span class="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full bg-[#2f80e8] font-english text-[20px] font-semibold text-white">${badge}</span>
+            <div class="min-w-0 flex-1 pt-1">
+              <p class="whitespace-pre-line text-[18px] leading-snug text-[#14305c]">${esc(q.question)}</p>
+              ${exprLine}
+            </div>
+            <button type="button" onclick="copyQuestion(${index}, this)" aria-label="প্রশ্ন কপি করুন"
+              class="h-9 w-9 shrink-0 text-[#1554a4] transition hover:text-blue-600">
+              <i class="fa-regular fa-copy text-[22px]"></i>
+            </button>
+          </section>
+
+          <!-- সমাধান -->
+          <section class="rounded-[20px] border border-[#e8eff9] bg-white p-4 shadow-[0_2px_10px_rgba(30,64,110,0.04)]">
+            <div class="flex items-center gap-3">
+              <span class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-[#2fb36d] text-white">
+                <i class="fa-regular fa-lightbulb text-[22px]"></i>
+              </span>
+              <h2 class="text-[22px] font-bold text-[#0f2a5c]">সমাধান</h2>
+            </div>
+            <div class="mt-4 space-y-1">${solutionHtml(q.solution)}</div>
+          </section>
+
+        </article>`;
+    }
+
+    function copyQuestion(index, btn) {
+      const q = questions[index];
+      const text = [q.question, (q.part ? q.part + ' ' : '') + (q.expr || '')].join('\n').trim();
+      const icon = btn.querySelector('i');
+      const done = function () {
+        icon.className = 'fa-solid fa-check text-[22px]';
+        setTimeout(function () { icon.className = 'fa-regular fa-copy text-[22px]'; }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {});
+      }
+    }
+
+    function initBookmark() {
+      const key = 'ganitBondhuBookmark:' + meta.classNo + ':' + meta.exercise;
+      const btn = document.getElementById('bookmark-btn');
+      const icon = document.getElementById('bookmark-icon');
+
+      function paint(on) {
+        icon.className = (on ? 'fa-solid' : 'fa-regular') + ' fa-bookmark text-[22px]';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+
+      let saved = false;
+      try { saved = localStorage.getItem(key) === '1'; } catch (e) {}
+      paint(saved);
+
+      btn.addEventListener('click', function () {
+        saved = !saved;
+        paint(saved);
+        try {
+          if (saved) localStorage.setItem(key, '1'); else localStorage.removeItem(key);
+        } catch (e) {}
+      });
+    }
+
+    function init() {
+      document.getElementById('bc-class').textContent = meta.classNo;
+      document.getElementById('bc-chapter').textContent = 'Chapter ' + meta.chapterNo + ': ' + meta.chapterTitle;
+      document.getElementById('bc-exercise').textContent = 'Exercise ' + meta.exercise;
+      document.title = 'Exercise ' + meta.exercise + ' সমাধান — গণিত বন্ধু';
+
+      const box = document.getElementById('questions');
+      if (!questions.length) {
+        document.getElementById('empty-message').classList.remove('hidden');
+      } else {
+        box.innerHTML = questions.map(questionHtml).join('');
+        // MathJax আগে থেকেই তৈরি থাকলে নতুন অংশ আবার টাইপসেট করে
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([box]);
+        }
+      }
+      initBookmark();
+    }
+
+    // পেজের শেষে চলে, তাই MathJax নিজে থেকেই লোড হয়ে সব সূত্র রেন্ডার করবে
+    init();
+  </script>
+
+</body>
+
+                                              </html>
