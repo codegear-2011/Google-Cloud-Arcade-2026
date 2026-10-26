@@ -11,14 +11,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            bengali: ['Tiro Bangla', 'serif'],
+            bengali: ['Hind Siliguri', 'Noto Sans Bengali', 'sans-serif'],
             english: ['Inter', 'sans-serif']
           }
         }
@@ -28,7 +28,9 @@
 
   <style>
     * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Hind Siliguri', sans-serif; }
+    html, body {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    }
     .app-shell { max-width: 520px; }
 
     .chapter-card { transition: transform .2s ease, box-shadow .2s ease; }
@@ -124,7 +126,7 @@
     </div>
 
     <!-- ===== Chapter list ===== -->
-    <section id="chapter-list" aria-label="অধ্যায় তালিকা" class="mt-5 space-y-3"></section>
+    <section id="chapter-list" aria-label="অধ্যায��� তালিকা" class="mt-5 space-y-3"></section>
 
     <p id="toast" role="status" class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 whitespace-nowrap rounded-full bg-[#123d7d] px-5 py-3 text-[15px] text-white shadow-lg"></p>
 
@@ -133,14 +135,12 @@
   </main>
 
   <script>
-    // শ্রেণী: আগের পেজে নির্বাচিত মান, না থাকলে ৯
     let savedClass = '9';
     try {
       savedClass = localStorage.getItem('ganitBondhuSelectedClass') || '9';
     } catch (e) {}
     document.getElementById('class-number').textContent = savedClass;
 
-    // রঙের সেট
     const colors = {
       blue:   { bg: 'bg-[#dbeafe]', text: 'text-[#1765c4]' },
       green:  { bg: 'bg-[#d6f5e4]', text: 'text-[#168357]' },
@@ -150,50 +150,13 @@
       pink:   { bg: 'bg-[#ffdce3]', text: 'text-[#cf2d52]' }
     };
 
-    // অধ্যায়ের তালিকা — প্রতিটি লাইনের link: '' এর ভেতরে সমাধানের HTML ফাইলের লিংক বসান
-    // উদাহরণ: link: 'solutions/1-1.html'  অথবা  link: 'https://example.com/9/1-1.html'
     const chapters = [
-      { no: 1, ex: '1.1', title: 'বাস্তব সংখ্যা (কষে দেখি 1.1)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখি ১.১ এর সমস্ত উত্তর এখানে', link: 'bastob-sonkha-1.1.html', color: 'blue' },
-      { no: 1, ex: '1.2', title: 'বাস্তব সংখ্যা (কষে দেখি 1.2)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখি ১.২ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 1, ex: '1.3', title: 'বাস্তব সংখ্যা (কষে দেখি 1.3)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখি ১.৩ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 2, ex: '2', title: 'সূচকের নিয়মাবলি (কষে দেখি 2)', desc: 'সূচকের নিয়মাবলি অধ্যায়ের কষে দেখি ২ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 3, ex: '3.1', title: 'লেখচিত্র (কষে দেখি 3.1)', desc: 'লেখচিত্র অধ্যায়ের কষে দেখি ৩.১ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 3, ex: '3.2', title: 'লেখচিত্র (কষে দেখি 3.2)', desc: 'লেখচিত্র অধ্যায়ের কষে দেখি ৩.২ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 4, ex: '4', title: 'স্থানাঙ্ক জ্যামিতি : দূরত্ব নির্ণয় (কষে দেখি 4)', desc: 'স্থানাঙ্ক জ্যামিতি : দূরত্ব নির্ণয় অধ্যায়ের কষে দেখি ৪ এর সমস্ত উত্তর এখানে', link: '', color: 'orange' },
-      { no: 5, ex: '5.1', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.1)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.১ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.2', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.2)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.২ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.3', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.3)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.৩ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.4', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.4)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.৪ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.5', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.5)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.৫ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.6', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.6)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.৬ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 5, ex: '5.7', title: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) (কষে দেখি 5.7)', desc: 'রৈখিক সহ সমীকরণ (দুই চল বিশিষ্ট) অধ্যায়ের কষে দেখি ৫.৭ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 6, ex: '6', title: 'সামান্তরিকের ধর্ম (কষে দেখি 6)', desc: 'সামান্তরিকের ধর্ম অধ্যায়ের কষে দেখি ৬ এর সমস্ত উত্তর এখানে', link: '', color: 'pink' },
-      { no: 7, ex: '7.1', title: 'বহুপদী সংখ্যামালা (কষে দেখি 7.1)', desc: 'বহুপদী সংখ্যামালা অধ্যায়ের কষে দেখি ৭.১ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 7, ex: '7.2', title: 'বহুপদী সংখ্যামালা (কষে দেখি 7.2)', desc: 'বহুপদী সংখ্যামালা অধ্যায়ের কষে দেখি ৭.২ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 7, ex: '7.3', title: 'বহুপদী সংখ্যামালা (কষে দেখি 7.3)', desc: 'বহুপদী সংখ্যামালা অধ্যায়ের কষে দেখি ৭.৩ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 7, ex: '7.4', title: 'বহুপদী সংখ্যামালা (কষে দেখি 7.4)', desc: 'বহুপদী সংখ্যামালা অধ্যায়ের কষে দেখি ৭.৪ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 8, ex: '8.1', title: 'উৎপাদকে বিশ্লেষণ (কষে দেখি 8.1)', desc: 'উৎপাদকে বিশ্লেষণ অধ্যায়ের কষে দেখি ৮.১ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 8, ex: '8.2', title: 'উৎপাদকে বিশ্লেষণ (কষে দেখি 8.2)', desc: 'উৎপাদকে বিশ্লেষণ অধ্যায়ের কষে দেখি ৮.২ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 8, ex: '8.3', title: 'উৎপাদকে বিশ্লেষণ (কষে দেখি 8.3)', desc: 'উৎপাদকে বিশ্লেষণ অধ্যায়ের কষে দেখি ৮.৩ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 8, ex: '8.4', title: 'উৎপাদকে বিশ্লেষণ (কষে দেখি 8.4)', desc: 'উৎপাদকে বিশ্লেষণ অধ্যায়ের কষে দেখি ৮.৪ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 8, ex: '8.5', title: 'উৎপাদকে বিশ্লেষণ (কষে দেখি 8.5)', desc: 'উৎপাদকে বিশ্লেষণ অধ্যায়ের কষে দেখি ৮.৫ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 9, ex: '9', title: 'ভেদক ও মধ্যবিন্দু সংক্রান্ত উপপাদ্য (কষে দেখি 9)', desc: 'ভেদক ও মধ্যবিন্দু সংক্রান্ত উপপাদ্য অধ্যায়ের কষে দেখি ৯ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 10, ex: '10.1', title: 'লাভ ও ক্ষতি (কষে দেখি 10.1)', desc: 'লাভ ও ক্ষতি অধ্যায়ের কষে দেখি ১০.১ এর সমস্ত উত্তর এখানে', link: '', color: 'orange' },
-      { no: 10, ex: '10.2', title: 'লাভ ও ক্ষতি (কষে দেখি 10.2)', desc: 'লাভ ও ক্ষতি অধ্যায়ের কষে দেখি ১০.২ এর সমস্ত উত্তর এখানে', link: '', color: 'orange' },
-      { no: 11, ex: '11.1', title: 'রাশিবিজ্ঞান (কষে দেখি 11.1)', desc: 'রাশিবিজ্ঞান অধ্যায়ের কষে দেখি ১১.১ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 11, ex: '11.2', title: 'রাশিবিজ্ঞান (কষে দেখি 11.2)', desc: 'রাশিবিজ্ঞান অধ্যায়ের কষে দেখি ১১.২ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 12, ex: '12', title: 'ক্ষেত্রফল সংক্রান্ত উপপাদ্য (কষে দেখি 12)', desc: 'ক্ষেত্রফল সংক্রান্ত উপপাদ্য অধ্যায়ের কষে দেখি ১২ এর সমস্ত উত্তর এখানে', link: '', color: 'pink' },
-      { no: 13, ex: '13', title: 'সম্পাদ্য : ত্রিভুজের সমান ক্ষেত্রফল বিশিষ্ট সামান্তরিক অঙ্কন (কষে দেখি 13)', desc: 'সম্পাদ্য : ত্রিভুজের সমান ক্ষেত্রফল বিশিষ্ট সামান্তরিক অঙ্কন অধ্যায়ের কষে দেখি ১৩ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 14, ex: '14', title: 'সম্পাদ্য : চতুর্ভুজের সমান ক্ষেত্রফল বিশিষ্ট ত্রিভুজ অঙ্কন (কষে দেখি 14)', desc: 'সম্পাদ্য : চতুর্ভুজের সমান ক্ষেত্রফল বিশিষ্ট ত্রিভুজ অঙ্কন অধ্যায়ের কষে দেখি ১৪ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 15, ex: '15.1', title: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল (কষে দেখি 15.1)', desc: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল অধ্যায়ের কষে দেখি ১৫.১ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 15, ex: '15.2', title: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল (কষে দেখি 15.2)', desc: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল অধ্যায়ের কষে দেখি ১৫.২ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 15, ex: '15.3', title: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল (কষে দেখি 15.3)', desc: 'ত্রিভুজ ও চতুর্ভুজের পরিসীমা ও ক্ষেত্রফল অধ্যায়ের কষে দেখি ১৫.৩ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' },
-      { no: 16, ex: '16', title: 'বৃত্তের পরিধি (কষে দেখি 16)', desc: 'বৃত্তের পরিধি অধ্যায়ের কষে দেখি ১৬ এর সমস্ত উত্তর এখানে', link: '', color: 'orange' },
-      { no: 17, ex: '17', title: 'সমবিন্দু সংক্রান্ত উপপাদ্য (কষে দেখি 17)', desc: 'সমবিন্দু সংক্রান্ত উপপাদ্য অধ্যায়ের কষে দেখি ১৭ এর সমস্ত উত্তর এখানে', link: '', color: 'teal' },
-      { no: 18, ex: '18', title: 'বৃত্তের ক্ষেত্রফল (কষে দেখি 18)', desc: 'বৃত্তের ক্ষেত্রফল অধ্যায়ের কষে দেখি ১৮ এর সমস্ত উত্তর এখানে', link: '', color: 'pink' },
-      { no: 19, ex: '19', title: 'স্থানাঙ্ক জ্যামিতি: সরলরেখাংশের অন্তর্বিভক্ত ও বহিঃর্বিভক্ত (কষে দেখি 19)', desc: 'স্থানাঙ্ক জ্যামিতি: সরলরেখাংশের অন্তর্বিভক্ত ও বহিঃর্বিভক্ত অধ্যায়ের কষে দেখি ১৯ এর সমস্ত উত্তর এখানে', link: '', color: 'blue' },
-      { no: 20, ex: '20', title: 'স্থানাঙ্ক জ্যামিতি: ত্রিভুজাকৃতি ক্ষেত্রের ক্ষেত্রফল (কষে দেখি 20)', desc: 'স্থানাঙ্ক জ্যামিতি: ত্রিভুজাকৃতি ক্ষেত্রের ক্ষেত্রফল অধ্যায়ের কষে দেখি ২০ এর সমস্ত উত্তর এখানে', link: '', color: 'green' },
-      { no: 21, ex: '21', title: 'লগারিদম (কষে দেখি 21)', desc: 'লগারিদম অধ্যায়ের কষে দেখি ২১ এর সমস্ত উত্তর এখানে', link: '', color: 'purple' }
+      { no: 1, ex: '1.1', title: 'বাস্তব সংখ্যা (কষে দেখি 1.1)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখার সমাধান', color: 'blue', link: '' },
+      { no: 1, ex: '1.2', title: 'বাস্তব সংখ্যা (কষে দেখি 1.2)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখার সমাধান', color: 'green', link: '' },
+      { no: 1, ex: '1.3', title: 'বাস্তব সংখ্যা (কষে দেখি 1.3)', desc: 'বাস্তব সংখ্যা অধ্যায়ের কষে দেখার সমাধান', color: 'purple', link: '' },
+      { no: 2, ex: '2', title: 'সূচকের নিয়মাবলি (কষে দেখি 2)', desc: 'সূচকের নিয়মাবলি অধ্যায়ের সমাধান', color: 'orange', link: '' },
+      { no: 3, ex: '3.1', title: 'লেখচিত্র (কষে দেখি 3.1)', desc: 'লেখচিত্র অধ্যায়ের সমাধান', color: 'teal', link: '' },
+      { no: 3, ex: '3.2', title: 'লেখচিত্র (কষে দেখি 3.2)', desc: 'লেখচিত্র অধ্যায়ের সমাধান', color: 'pink', link: '' }
     ];
 
     const list = document.getElementById('chapter-list');
@@ -202,7 +165,7 @@
 
     function renderChapters(items) {
       list.innerHTML = items.map(function (c) {
-        const col = colors[c.color];
+        const col = colors[c.color] || colors.blue;
         return `
           <button type="button" onclick="openChapter('${c.ex}')"
             class="chapter-card flex w-full items-center gap-4 rounded-[20px] border border-[#e8eff9] bg-white px-4 py-4 text-left shadow-[0_2px_10px_rgba(30,64,110,0.04)]">
@@ -234,7 +197,7 @@
       } catch (e) {}
 
       if (item && item.link) {
-        window.location.href = item.link;   // HTML ফাইলের লিংকে যায়
+        window.location.href = item.link;
       } else {
         showToast('এই অংশের সমাধান শীঘ্রই আসছে।');
       }
