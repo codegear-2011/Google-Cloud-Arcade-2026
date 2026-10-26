@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- MathJax (LaTeX support) -->
   <script>
@@ -35,7 +35,7 @@
       theme: {
         extend: {
           fontFamily: {
-            bengali: ['Tiro Bangla', 'serif'],
+            bengali: ['Hind Siliguri', 'Noto Sans Bengali', 'sans-serif'],
             english: ['Inter', 'sans-serif']
           }
         }
@@ -45,7 +45,9 @@
 
   <style>
     * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Hind Siliguri', sans-serif; }
+    html, body {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    }
     .app-shell { max-width: 520px; }
 
     button:focus-visible {
@@ -149,23 +151,23 @@
         no: '1',
         part: '(i)',
         question: 'মূলদ সংখ্যা কাকে বলে লিখি। 4টি মূলদ সংখ্যা লিখি।',
-        
+
         solution: [
-          '**মূলদ সংখ্যা :** যেসকল সংখ্যাকে $\\frac{p}{q}$ আকারে প্রকাশ করা যায়, যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \\neq 0$, তাদের মূলদ সংখ্যা বলে।',
-    '৪টি মূলদ সংখ্যা হল :',
-    '$$4, \\ \\frac{2}{5}, \\ \\frac{7}{15}, \\ \\frac{9}{14}$$'
+          '**মূলদ সংখ্যা :** যেসকল সংখ্যাকে $\\frac{p}{q}$ আকারে প্রকাশ করা যায়, যেখানে $p$ ও $q$ পূর্ণসংখ্যা, $q \neq 0$।',
+          '৪টি মূলদ সংখ্যা হল :',
+          '$$4, \\frac{2}{5}, \\frac{7}{15}, \\frac{9}{14}$$'
         ]
       },
       {
-  no: '2',
-  question: '$0$ কি মূলদ সংখ্যা ? $0$-কে $\\frac{p}{q}$ [যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \\neq 0$, এবং $p$ ও $q$-এর মধ্যে $1$ ছাড়া কোনো সাধারণ উৎপাদক না থাকে] আকারে প্রকাশ করো।',
-  solution: [
-    '$0$ একটি মূলদ সংখ্যা।',
-    'কারণ, শূন্যকে $\\frac{p}{q}\\ (q \\neq 0)$ আকারে প্রকাশ করা যায়।',
-    'যেমন, $0 = \\frac{0}{x}$ যেখানে $x \\neq 0$',
-    '$\\therefore\\ 0$-কে $\\frac{0}{x}$ যেখানে $x \\neq 0$ আকারে প্রকাশ করা যায়।'
-  ]
-}
+        no: '2',
+        question: '$0$ কি মূলদ সংখ্যা ? $0$-কে $\\frac{p}{q}$ আকারে প্রকাশ করা যায়, যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \neq 0$।',
+        solution: [
+          '$0$ একটি মূলদ সংখ্যা।',
+          'কারণ, শূন্যকে $\\frac{p}{q}\\ (q \\neq 0)$ আকারে প্রকাশ করা যায়।',
+          'যেমন, $0 = \\frac{0}{x}$ যেখানে $x \\neq 0$',
+          '$\\therefore\\ 0$-কে $\\frac{0}{x}$ যেখানে $x \\neq 0$ আকারে প্রকাশ করা যায়।'
+        ]
+      }
     ];
 
     /* ===================== নিচের অংশে হাত দিতে হবে না ===================== */
@@ -188,7 +190,6 @@
     }
 
     function questionHtml(q, index) {
-      // no না দিলে স্বয়ংক্রিয়ভাবে ক্রমিক নম্বর (১, ২, ৩...) বসে
       const no = (q.no !== undefined && q.no !== null && String(q.no).trim() !== '') ? q.no : index + 1;
       const badge = 'Q.' + esc(no);
       const exprLine = q.expr
@@ -274,7 +275,6 @@
         document.getElementById('empty-message').classList.remove('hidden');
       } else {
         box.innerHTML = questions.map(questionHtml).join('');
-        // MathJax আগে থেকেই তৈরি থাকলে নতুন অংশ আবার টাইপসেট করে
         if (window.MathJax && window.MathJax.typesetPromise) {
           window.MathJax.typesetPromise([box]);
         }
@@ -282,10 +282,9 @@
       initBookmark();
     }
 
-    // পেজের শেষে চলে, তাই MathJax নিজে থেকেই লোড হয়ে সব সূত্র রেন্ডার করবে
     init();
   </script>
 
 </body>
 
-                                              </html>
+</html>
