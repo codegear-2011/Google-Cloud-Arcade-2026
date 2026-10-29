@@ -9,6 +9,9 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Font Awesome (আইকনের জন্য) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -129,13 +132,13 @@
          question  : প্রশ্নের লেখা
          expr      : (ঐচ্ছিক) প্রশ্নের সমীকরণ, শুধু LaTeX (ডলার ছাড়া)
          solution  : পুরো সমাধান। একটা লেখা অথবা লাইনের অ্যারে
+                     অ্যারের ভেতরে ছবি দিতে: { img: 'লিংক', alt: 'বর্ণনা' }
 
-       LaTeX লেখার নিয়ম (MathJax):
+       লেখার নিয়ম:
          • লাইনের ভেতরে গণিত  :  $x = 4$   অথবা  \\(x = 4\\)
          • আলাদা লাইনে গণিত   :  $$ \\frac{8}{2} $$   অথবা  \\[ ... \\]
          • ব্যাকস্ল্যাশ সবসময় দুটো লিখতে হবে:  \\frac, \\sqrt, \\times
-         • একাধিক লাইন মিলিয়ে লিখতে:
-              $$\\begin{aligned} 2x &= 8 \\\\ x &= 4 \\end{aligned}$$
+         • বোল্ড লেখা : **এভাবে**
          • solution অ্যারে হলে প্রতিটি উপাদান আলাদা লাইনে দেখাবে
        ===================================================================== */
 const meta = {
@@ -160,9 +163,8 @@ const questions = [
     question: '$0$ কি মূলদ সংখ্যা ? $0$-কে $\\frac{p}{q}$ [যেখানে $p$ ও $q$ পূর্ণসংখ্যা এবং $q \\neq 0$, এবং $p$ ও $q$-এর মধ্যে $1$ ছাড়া কোনো সাধারণ উৎপাদক না থাকে] আকারে প্রকাশ করো।',
     solution: [
       '$0$ একটি মূলদ সংখ্যা।',
-      'কারণ, শূন্যকে $\\frac{p}{q}\\ (q \\neq 0)$ আকারে প্রকাশ করা যায়।',
-      'যেমন, $0 = \\frac{0}{x}$ যেখানে $x \\neq 0$',
-      '$\\therefore\\ 0$-কে $\\frac{0}{x}$ যেখানে $x \\neq 0$ আকারে প্রকাশ করা যায়।'
+      'কারণ, $0 = \\frac{0}{1}$, যেখানে $p = 0$, $q = 1$ এবং $q \\neq 0$; আর $0$ ও $1$-এর মধ্যে $1$ ছাড়া কোনো সাধারণ উৎপাদক নেই।',
+      '$\\therefore\\ 0$-কে $\\frac{0}{1}$ আকারে প্রকাশ করা যায়।'
     ]
   },
   {
@@ -215,14 +217,17 @@ const questions = [
       '**(iii)** $\\frac{1}{4}$ ও $\\frac{1}{2}$ এর মধ্যে একটি মূলদ সংখ্যা:',
       'সংখ্যাটি হলো',
       '$$\\frac{\\frac{1}{4} + \\frac{1}{2}}{2} = \\frac{\\frac{1+2}{4}}{2} = \\frac{\\frac{3}{4}}{2} = \\frac{3}{8}$$',
+      { img: 'images/1-1/q4-iii.png', alt: '1/4 ও 1/2 এর মধ্যবর্তী সংখ্যা' },
 
       '**(iv)** $-1$ ও $\\frac{1}{2}$ এর মধ্যে একটি মূলদ সংখ্যা:',
       'সংখ্যাটি হলো',
       '$$\\frac{-1 + \\frac{1}{2}}{2} = \\frac{\\frac{-2+1}{2}}{2} = \\frac{-\\frac{1}{2}}{2} = -\\frac{1}{4}$$',
+      { img: 'images/1-1/q4-iv.png', alt: '-1 ও 1/2 এর মধ্যবর্তী সংখ্যা' },
 
       '**(v)** $\\frac{1}{4}$ ও $\\frac{1}{3}$ এর মধ্যে একটি মূলদ সংখ্যা:',
       'সংখ্যাটি হলো',
       '$$\\frac{\\frac{1}{4} + \\frac{1}{3}}{2} = \\frac{\\frac{3+4}{12}}{2} = \\frac{\\frac{7}{12}}{2} = \\frac{7}{24}$$',
+      { img: 'images/1-1/q4-v.png', alt: '1/4 ও 1/3 এর মধ্যবর্তী সংখ্যা' },
 
       '**(vi)** $-2$ ও $-1$ এর মধ্যে একটি মূলদ সংখ্যা:',
       'সংখ্যাটি হলো $= \\frac{-2 + (-1)}{2} = \\frac{-3}{2}$',
@@ -292,7 +297,7 @@ const questions = [
       'দুটি মূলদ সংখ্যার যোগ, বিয়োগ, গুণ ও ভাগ (ভাজক শূন্য না হলে) করলে সর্বদা একটি **মূলদ সংখ্যা**-ই পাওয়া যায়।',
       'অর্থাৎ, মূলদ সংখ্যার সেট (Rational Numbers) যোগ, বিয়োগ, গুণ ও ভাগের (শূন্য দ্বারা ভাগ বাদে) সাপেক্ষে আবদ্ধ (Closure Property মেনে চলে)।'
     ]
-       }
+  }
 ];
 
     /* ===================== নিচের অংশে হাত দিতে হবে না ===================== */
@@ -301,15 +306,26 @@ const questions = [
       return String(value == null ? '' : value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
     function solutionHtml(sol) {
       const lines = Array.isArray(sol) ? sol : String(sol || '').split('\n');
       return lines
-        .filter(function (l) { return String(l).trim() !== ''; })
+        .filter(function (l) {
+          return l && (typeof l === 'object' || String(l).trim() !== '');
+        })
         .map(function (l) {
-          return '<div class="text-[18px] leading-[1.8] text-[#14305c]">' + esc(l) + '</div>';
+          // ছবি
+          if (typeof l === 'object' && l.img) {
+            return '<img src="' + esc(l.img) + '" alt="' + esc(l.alt || '') + '" loading="lazy"' +
+              ' onerror="this.style.display=\'none\'"' +
+              ' class="my-2 w-full rounded-xl border border-[#e8eff9] bg-white">';
+          }
+          // লেখা + **বোল্ড**
+          const html = esc(l).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+          return '<div class="text-[18px] leading-[1.8] text-[#14305c]">' + html + '</div>';
         })
         .join('');
     }
@@ -353,16 +369,47 @@ const questions = [
         </article>`;
     }
 
+    /* LaTeX -> পড়ার মতো সাধারণ লেখা (কপির জন্য) */
+    function latexToPlain(s) {
+      let t = String(s || '');
+      for (let i = 0; i < 4; i++) {
+        t = t.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, '($1)/($2)');
+      }
+      return t
+        .replace(/\\neq/g, '≠')
+        .replace(/\\times/g, '×')
+        .replace(/\\div/g, '÷')
+        .replace(/\\therefore/g, '∴')
+        .replace(/\\ /g, ' ')
+        .replace(/\$/g, '')
+        .replace(/\(([^()\/]+)\)\/\(([^()\/]+)\)/g, '$1/$2');
+    }
+
     function copyQuestion(index, btn) {
       const q = questions[index];
-      const text = [q.question, (q.part ? q.part + ' ' : '') + (q.expr || '')].join('\n').trim();
+      const text = latexToPlain([q.question, (q.part ? q.part + ' ' : '') + (q.expr || '')].join('\n').trim());
       const icon = btn.querySelector('i');
       const done = function () {
         icon.className = 'fa-solid fa-check text-[22px]';
         setTimeout(function () { icon.className = 'fa-regular fa-copy text-[22px]'; }, 1500);
       };
+      const fallback = function () {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          if (ok) done();
+        } catch (e) {}
+      };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () {});
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
       }
     }
 
@@ -389,6 +436,16 @@ const questions = [
       });
     }
 
+    function typeset(box) {
+      // MathJax async লোড হয়; তৈরি হলে তবেই typeset করি
+      if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+        window.MathJax.startup.promise.then(function () {
+          if (window.MathJax.typesetPromise) window.MathJax.typesetPromise([box]);
+        });
+      }
+      // MathJax এখনও লোড না হলে, লোড হওয়ার পর নিজেই পুরো পেজ typeset করবে
+    }
+
     function init() {
       document.getElementById('bc-class').textContent = meta.classNo;
       document.getElementById('bc-chapter').textContent = 'Chapter ' + meta.chapterNo + ': ' + meta.chapterTitle;
@@ -400,9 +457,7 @@ const questions = [
         document.getElementById('empty-message').classList.remove('hidden');
       } else {
         box.innerHTML = questions.map(questionHtml).join('');
-        if (window.MathJax && window.MathJax.typesetPromise) {
-          window.MathJax.typesetPromise([box]);
-        }
+        typeset(box);
       }
       initBookmark();
     }
